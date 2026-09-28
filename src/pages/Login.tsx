@@ -38,9 +38,9 @@ export function Login() {
   return (
     <div className="min-h-screen bg-background px-4 py-6 sm:px-6 sm:py-8">
       <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-md items-center">
-        <Card className="w-full border-border bg-white/95 shadow-xl">
+        <Card className="w-full border-border bg-card/95 shadow-xl">
           <CardHeader className="space-y-4">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-navy font-heading text-lg font-extrabold text-gold">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-brand-navy font-heading text-lg font-extrabold text-gold">
               FG
             </div>
             <div className="space-y-1 text-center">
