@@ -1,23 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Loader2, Package } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import { ApiError } from '@/services/api';
 import { obtenerCatalogo } from '@/services/catalogoService';
 import type { ProductoCatalogo } from '@/types/catalogo';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { formatoMoneda } from '@/lib/formato';
 
 const TAMANO_PAGINA = 20;
 
-const formatoMoneda = new Intl.NumberFormat('es-CO', {
-  style: 'currency',
-  currency: 'COP',
-  maximumFractionDigits: 0,
-});
-
 export function Catalogo() {
   const { usuario, token } = useAuth();
+  const { agregarProducto } = useCart();
 
   const [productos, setProductos] = useState<ProductoCatalogo[]>([]);
   const [pagina, setPagina] = useState(1);
@@ -56,8 +54,8 @@ export function Catalogo() {
   }
 
   function pedir(producto: ProductoCatalogo) {
-    // TODO: implementar lógica real de pedido (próximo módulo).
-    console.log('Pedir producto', producto.id);
+    agregarProducto(producto);
+    toast.success(`${producto.nombre} agregado al carrito`);
   }
 
   return (

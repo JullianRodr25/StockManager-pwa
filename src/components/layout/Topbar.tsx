@@ -1,7 +1,9 @@
 import { Moon, ShoppingCart, Sun } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
+import { useCart } from '@/context/CartContext';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,9 +22,14 @@ function obtenerIniciales(nombre: string): string {
     .join('');
 }
 
-export function Topbar() {
+interface TopbarProps {
+  onCartClick: () => void;
+}
+
+export function Topbar({ onCartClick }: TopbarProps) {
   const { usuario, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { cantidadTotal } = useCart();
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 sm:px-6">
@@ -45,10 +52,19 @@ export function Topbar() {
 
         <button
           type="button"
-          className="flex h-9 w-9 items-center justify-center rounded-md text-navy hover:bg-accent hover:text-accent-foreground"
+          onClick={onCartClick}
+          className="relative flex h-9 w-9 items-center justify-center rounded-md text-navy hover:bg-accent hover:text-accent-foreground"
           aria-label="Carrito de compras"
         >
           <ShoppingCart className="h-5 w-5" />
+          {cantidadTotal > 0 && (
+            <Badge
+              variant="gold"
+              className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[0.65rem]"
+            >
+              {cantidadTotal}
+            </Badge>
+          )}
         </button>
 
         <DropdownMenu>
