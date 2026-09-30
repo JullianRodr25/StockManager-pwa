@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { ApiError } from '@/services/api';
 import { obtenerCatalogo } from '@/services/catalogoService';
+import { useSincronizacionCatalogo } from '@/hooks/useSincronizacionCatalogo';
 import type { ProductoCatalogo } from '@/types/catalogo';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -42,6 +43,10 @@ export function Catalogo() {
     },
     [token]
   );
+
+  // Cuando el stock de un producto cambia (venta de mostrador, cuenta fiada, otro pedido de
+  // la PWA, etc.), esto actualiza en vivo el badge "Disponible"/"Agotado" sin recargar nada.
+  useSincronizacionCatalogo(setProductos);
 
   useEffect(() => {
     cargarCatalogo(1);
