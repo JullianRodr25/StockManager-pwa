@@ -7,6 +7,8 @@ import { RutaProtegida } from './components/RutaProtegida';
 import { AppLayout } from './components/layout/AppLayout';
 import { Login } from './pages/Login';
 import { Registro } from './pages/Registro';
+import { OlvideContrasena } from './pages/OlvideContrasena';
+import { RestablecerContrasena } from './pages/RestablecerContrasena';
 import { Catalogo } from './pages/Catalogo';
 import { Checkout } from './pages/Checkout';
 import { MisPedidos } from './pages/MisPedidos';
@@ -23,6 +25,8 @@ function App() {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/registro" element={<Registro />} />
+                <Route path="/olvide-contrasena" element={<OlvideContrasena />} />
+                <Route path="/restablecer-contrasena" element={<RestablecerContrasena />} />
                 <Route
                   element={
                     <RutaProtegida>

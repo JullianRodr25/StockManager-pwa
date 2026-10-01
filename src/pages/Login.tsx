@@ -78,6 +78,9 @@ export function Login() {
                   autoComplete="current-password"
                   required
                 />
+                <Link to="/olvide-contrasena" className="block text-right text-xs text-gold hover:underline">
+                  ¿Olvidaste tu contraseña?
+                </Link>
               </div>
 
               {error && (

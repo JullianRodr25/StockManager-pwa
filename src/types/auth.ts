@@ -30,3 +30,16 @@ export interface ClienteAutenticado {
   nombre: string;
   rol?: string; // Solo presente para usuarios de tipo Empleado
 }
+
+export interface SolicitarRecuperacionRequest {
+  email: string;
+}
+
+export interface RestablecerContrasenaRequest {
+  token: string;
+  nuevaPassword: string;
+}
+
+export interface MensajeResponse {
+  message: string;
+}
