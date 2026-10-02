@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { registrarCliente } from '../services/authService';
 import { ApiError } from '../services/api';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -49,136 +48,119 @@ export function Registro() {
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-md items-center">
-        <Card className="w-full border-border bg-card/95 shadow-xl">
-          <CardHeader className="space-y-4">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-brand-navy font-heading text-lg font-extrabold text-gold">
-              FG
-            </div>
-            <div className="space-y-1 text-center">
-              <CardTitle className="text-3xl text-navy">Crea tu cuenta</CardTitle>
-              <CardDescription>Pide tus productos a domicilio</CardDescription>
-            </div>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="nombre" className="text-navy">
-                  Nombre completo
-                </Label>
-                <Input
-                  id="nombre"
-                  type="text"
-                  value={form.nombre}
-                  onChange={(e) => handleChange('nombre', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="numeroIdentificacion" className="text-navy">
-                    Cédula
-                  </Label>
-                  <Input
-                    id="numeroIdentificacion"
-                    type="text"
-                    value={form.numeroIdentificacion}
-                    onChange={(e) => handleChange('numeroIdentificacion', e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="telefono" className="text-navy">
-                    Teléfono
-                  </Label>
-                  <Input
-                    id="telefono"
-                    type="tel"
-                    value={form.telefono}
-                    onChange={(e) => handleChange('telefono', e.target.value)}
-                    placeholder="Para WhatsApp"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-navy">
-                  Correo
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="direccion" className="text-navy">
-                  Dirección de entrega
-                </Label>
-                <Input
-                  id="direccion"
-                  type="text"
-                  value={form.direccion}
-                  onChange={(e) => handleChange('direccion', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-navy">
-                  Contraseña
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={form.password}
-                  onChange={(e) => handleChange('password', e.target.value)}
-                  autoComplete="new-password"
-                  minLength={8}
-                  required
-                />
-              </div>
-
-              {error && (
-                <div
-                  className="rounded-md border border-red-200 bg-error-bg px-3 py-2 text-sm text-error-text"
-                  role="alert"
-                >
-                  {error}
-                </div>
-              )}
-              {exito && (
-                <div className="rounded-md border border-green-200 bg-green/10 px-3 py-2 text-sm text-green">
-                  Cuenta creada. Redirigiendo...
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                variant="gold"
-                className="w-full font-heading text-sm uppercase tracking-wide"
-                disabled={enviando || exito}
-              >
-                {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
-              </Button>
-
-              <p className="text-center text-sm text-text-muted">
-                ¿Ya tienes cuenta?{' '}
-                <Link to="/login" className="font-medium text-navy hover:underline">
-                  Ingresa
-                </Link>
-              </p>
-            </form>
-          </CardContent>
-        </Card>
+    <div
+      className="flex flex-col overflow-y-auto bg-background px-7 py-8"
+      style={{ minHeight: '100dvh', paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
+    >
+      <div className="mx-auto mb-7 flex w-full max-w-sm flex-col items-center">
+        <img
+          src="/pwa-192.png"
+          alt="Ferretería Gold"
+          className="mb-3 h-14 w-14 rounded-xl border-2 border-gold object-cover"
+        />
+        <h1 className="font-heading text-2xl font-extrabold text-navy">Crea tu cuenta</h1>
+        <p className="mt-1 text-sm text-text-muted">Pide tus productos a domicilio</p>
       </div>
+
+      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-sm space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="nombre" className="text-xs font-bold text-navy">
+            Nombre completo
+          </Label>
+          <Input
+            id="nombre"
+            type="text"
+            value={form.nombre}
+            onChange={(e) => handleChange('nombre', e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="numeroIdentificacion" className="text-xs font-bold text-navy">
+              Cédula
+            </Label>
+            <Input
+              id="numeroIdentificacion"
+              type="text"
+              value={form.numeroIdentificacion}
+              onChange={(e) => handleChange('numeroIdentificacion', e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="telefono" className="text-xs font-bold text-navy">
+              Teléfono
+            </Label>
+            <Input
+              id="telefono"
+              type="tel"
+              value={form.telefono}
+              onChange={(e) => handleChange('telefono', e.target.value)}
+              placeholder="Para WhatsApp"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="email" className="text-xs font-bold text-navy">
+            Correo
+          </Label>
+          <Input id="email" type="email" value={form.email} onChange={(e) => handleChange('email', e.target.value)} required />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="direccion" className="text-xs font-bold text-navy">
+            Dirección de entrega
+          </Label>
+          <Input
+            id="direccion"
+            type="text"
+            value={form.direccion}
+            onChange={(e) => handleChange('direccion', e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="password" className="text-xs font-bold text-navy">
+            Contraseña
+          </Label>
+          <Input
+            id="password"
+            type="password"
+            value={form.password}
+            onChange={(e) => handleChange('password', e.target.value)}
+            autoComplete="new-password"
+            minLength={8}
+            required
+          />
+        </div>
+
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-error-bg px-3.5 py-2.5 text-sm text-error-text" role="alert">
+            {error}
+          </div>
+        )}
+        {exito && (
+          <div className="rounded-xl border border-green-200 bg-green/10 px-3.5 py-2.5 text-sm text-green">
+            Cuenta creada. Redirigiendo...
+          </div>
+        )}
+
+        <Button type="submit" variant="gold" size="lg" className="w-full" disabled={enviando || exito}>
+          {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
+        </Button>
+
+        <p className="pt-1 text-center text-sm text-text-muted">
+          ¿Ya tienes cuenta?{' '}
+          <Link to="/login" className="font-bold text-navy">
+            Ingresa
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }

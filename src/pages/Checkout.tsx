@@ -59,7 +59,7 @@ export function Checkout() {
     <div className="mx-auto flex max-w-lg flex-col gap-6">
       <h1 className="font-heading text-2xl font-bold text-navy">Confirmar pedido</h1>
 
-      <Card>
+      <Card className="rounded-2xl">
         <CardHeader>
           <CardTitle className="text-lg">Resumen</CardTitle>
         </CardHeader>
@@ -72,16 +72,16 @@ export function Checkout() {
               <span className="font-medium text-navy">{formatoMoneda.format(item.precio * item.cantidad)}</span>
             </div>
           ))}
-          <div className="flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-navy">
+          <div className="flex items-center justify-between border-t border-border pt-3 text-base font-bold text-navy">
             <span>Total</span>
-            <span>{formatoMoneda.format(totalCarrito)}</span>
+            <span className="text-gold">{formatoMoneda.format(totalCarrito)}</span>
           </div>
         </CardContent>
       </Card>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="direccion" className="flex items-center gap-1 text-navy">
+        <div className="space-y-1.5">
+          <Label htmlFor="direccion" className="flex items-center gap-1 text-xs font-bold text-navy">
             <MapPin className="h-4 w-4" /> Dirección de entrega
           </Label>
           <Input
@@ -94,12 +94,12 @@ export function Checkout() {
         </div>
 
         {error && (
-          <div className="rounded-md border border-red-200 bg-error-bg px-3 py-2 text-sm text-error-text" role="alert">
+          <div className="rounded-xl border border-red-200 bg-error-bg px-3.5 py-2.5 text-sm text-error-text" role="alert">
             {error}
           </div>
         )}
 
-        <Button type="submit" variant="gold" className="w-full" disabled={enviando}>
+        <Button type="submit" variant="gold" size="lg" className="w-full" disabled={enviando}>
           {enviando ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" /> Enviando pedido...

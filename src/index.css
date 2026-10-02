@@ -96,6 +96,8 @@
   }
 
   #root {
-    min-height: 100vh;
+    /* 100dvh en vez de 100vh: evita el salto/scroll de sobra que deja la barra de
+       direcciones del navegador móvil al aparecer/ocultarse (ver nota en Login.tsx). */
+    min-height: 100dvh;
   }
 }

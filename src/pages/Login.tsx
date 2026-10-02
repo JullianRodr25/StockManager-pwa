@@ -40,16 +40,24 @@ export function Login() {
     // página web adaptada). padding-top/bottom con env(safe-area-inset-*) para respetar el
     // notch y la barra de gestos cuando la PWA está instalada.
     <div
-      className="flex min-h-screen flex-col justify-center bg-background px-7"
+      className="flex flex-col justify-center overflow-y-auto bg-background px-7"
       style={{
+        // 100dvh en vez de min-h-screen (100vh): en el navegador del teléfono, 100vh cuenta el
+        // espacio detrás de la barra de direcciones aunque no sea visible, así que la página
+        // queda más alta que la pantalla real y aparece un scroll/salto raro aunque el
+        // contenido quepa perfecto. dvh ("dynamic viewport height") sí se ajusta al alto
+        // visible de verdad.
+        minHeight: '100dvh',
         paddingTop: 'max(2rem, env(safe-area-inset-top))',
         paddingBottom: 'max(2rem, env(safe-area-inset-bottom))',
       }}
     >
       <div className="mx-auto mb-9 flex w-full max-w-sm flex-col items-center">
-        <div className="mb-4 flex h-[72px] w-[72px] items-center justify-center rounded-2xl border-[3px] border-gold bg-brand-navy font-heading text-2xl font-extrabold text-gold">
-          FG
-        </div>
+        <img
+          src="/pwa-192.png"
+          alt="Ferretería Gold"
+          className="mb-4 h-[72px] w-[72px] rounded-2xl border-[3px] border-gold object-cover"
+        />
         <h1 className="font-heading text-2xl font-extrabold text-navy">Ferretería Gold</h1>
         <p className="mt-1 text-sm text-text-muted">Pide tus productos a domicilio</p>
       </div>

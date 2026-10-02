@@ -117,7 +117,7 @@ export function MisPedidos() {
               tabIndex={0}
               onClick={() => verDetalle(pedido.id)}
               onKeyDown={(e) => e.key === 'Enter' && verDetalle(pedido.id)}
-              className="flex cursor-pointer items-center justify-between gap-3 p-4 transition-colors motion-reduce:transition-none hover:border-gold/50"
+              className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl p-4 transition-colors motion-reduce:transition-none active:scale-[0.98] hover:border-gold/50"
             >
               <div className="flex flex-col gap-1">
                 <p className="text-sm font-medium text-navy">Pedido #{pedido.id}</p>

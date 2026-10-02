@@ -80,11 +80,11 @@ export function Catalogo() {
       ) : productos.length === 0 ? (
         <p className="py-8 text-center text-sm text-text-muted">No se encontraron productos.</p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
           {productos.map((producto) => (
-            <Card key={producto.id} className="flex flex-col gap-3 p-5">
+            <Card key={producto.id} className="flex flex-col gap-3 rounded-2xl p-4">
               <div className="flex items-start justify-between gap-2">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/10 text-gold">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold">
                   <Package className="h-6 w-6" />
                 </div>
                 <Badge
@@ -95,11 +95,11 @@ export function Catalogo() {
                 </Badge>
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-sm font-medium text-navy">{producto.nombre}</p>
+                <p className="text-sm font-medium leading-snug text-navy">{producto.nombre}</p>
                 <p className="text-xs text-text-muted">{producto.categoriaNombre}</p>
               </div>
               <div className="mt-auto flex items-center justify-between gap-2">
-                <p className="text-sm font-semibold text-gold">{formatoMoneda.format(producto.precio)}</p>
+                <p className="text-sm font-bold text-gold">{formatoMoneda.format(producto.precio)}</p>
                 <Button variant="gold" size="sm" disabled={!producto.disponible} onClick={() => pedir(producto)}>
                   Pedir
                 </Button>

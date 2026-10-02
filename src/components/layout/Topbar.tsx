@@ -34,9 +34,7 @@ export function Topbar({ onCartClick }: TopbarProps) {
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 sm:px-6">
       <div className="flex items-center gap-2">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-gold bg-brand-navy font-heading text-sm font-extrabold text-gold">
-          FG
-        </div>
+        <img src="/pwa-192.png" alt="" className="h-8 w-8 shrink-0 rounded-lg border-2 border-gold object-cover" />
         <span className="font-heading text-sm font-semibold text-navy">Ferretería Gold</span>
       </div>
 

@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import { ApiError } from '../services/api';
 import { restablecerContrasena } from '../services/authService';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -47,75 +46,73 @@ export function RestablecerContrasena() {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-background px-4 py-6 sm:px-6 sm:py-8">
-        <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-md items-center">
-          <Card className="w-full border-border bg-card/95 shadow-xl">
-            <CardContent className="space-y-4 pt-6 text-center">
-              <p className="text-sm text-text-muted">
-                Este enlace no es válido. Solicitá uno nuevo desde la pantalla de inicio de sesión.
-              </p>
-              <Link to="/olvide-contrasena" className="block text-sm text-gold hover:underline">
-                Solicitar un nuevo enlace
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+      <div
+        className="flex flex-col items-center justify-center overflow-y-auto bg-background px-7 text-center"
+        style={{ minHeight: '100dvh' }}
+      >
+        <p className="text-sm text-text-muted">
+          Este enlace no es válido. Solicitá uno nuevo desde la pantalla de inicio de sesión.
+        </p>
+        <Link to="/olvide-contrasena" className="mt-3 block text-sm font-bold text-gold">
+          Solicitar un nuevo enlace
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-md items-center">
-        <Card className="w-full border-border bg-card/95 shadow-xl">
-          <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl text-navy">Restablecer contraseña</CardTitle>
-            <CardDescription>Elegí una nueva contraseña para tu cuenta.</CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="nuevaPassword" className="text-navy">
-                  Nueva contraseña
-                </Label>
-                <Input
-                  id="nuevaPassword"
-                  type="password"
-                  value={nuevaPassword}
-                  onChange={(e) => setNuevaPassword(e.target.value)}
-                  autoComplete="new-password"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmarPassword" className="text-navy">
-                  Confirmar contraseña
-                </Label>
-                <Input
-                  id="confirmarPassword"
-                  type="password"
-                  value={confirmarPassword}
-                  onChange={(e) => setConfirmarPassword(e.target.value)}
-                  autoComplete="new-password"
-                  required
-                />
-              </div>
-
-              {error && (
-                <div className="rounded-md border border-red-200 bg-error-bg px-3 py-2 text-sm text-error-text" role="alert">
-                  {error}
-                </div>
-              )}
-
-              <Button type="submit" variant="gold" className="w-full font-heading text-sm uppercase tracking-wide" disabled={enviando}>
-                {enviando ? 'Guardando...' : 'Guardar nueva contraseña'}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+    <div
+      className="flex flex-col justify-center overflow-y-auto bg-background px-7"
+      style={{
+        minHeight: '100dvh',
+        paddingTop: 'max(2rem, env(safe-area-inset-top))',
+        paddingBottom: 'max(2rem, env(safe-area-inset-bottom))',
+      }}
+    >
+      <div className="mx-auto mb-7 w-full max-w-sm text-center">
+        <h1 className="font-heading text-2xl font-extrabold text-navy">Restablecer contraseña</h1>
+        <p className="mt-2 text-sm text-text-muted">Elegí una nueva contraseña para tu cuenta.</p>
       </div>
+
+      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-sm space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="nuevaPassword" className="text-xs font-bold text-navy">
+            Nueva contraseña
+          </Label>
+          <Input
+            id="nuevaPassword"
+            type="password"
+            value={nuevaPassword}
+            onChange={(e) => setNuevaPassword(e.target.value)}
+            autoComplete="new-password"
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="confirmarPassword" className="text-xs font-bold text-navy">
+            Confirmar contraseña
+          </Label>
+          <Input
+            id="confirmarPassword"
+            type="password"
+            value={confirmarPassword}
+            onChange={(e) => setConfirmarPassword(e.target.value)}
+            autoComplete="new-password"
+            required
+          />
+        </div>
+
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-error-bg px-3.5 py-2.5 text-sm text-error-text" role="alert">
+            {error}
+          </div>
+        )}
+
+        <Button type="submit" variant="gold" size="lg" className="w-full" disabled={enviando}>
+          {enviando ? 'Guardando...' : 'Guardar nueva contraseña'}
+        </Button>
+      </form>
     </div>
   );
 }
