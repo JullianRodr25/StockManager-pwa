@@ -13,6 +13,7 @@ import { Catalogo } from './pages/Catalogo';
 import { Checkout } from './pages/Checkout';
 import { MisPedidos } from './pages/MisPedidos';
 import { Toaster } from '@/components/ui/sonner';
+import { InstallPrompt } from '@/components/InstallPrompt';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <StockRealtimeProvider>
             <CartProvider>
               <Toaster position="top-center" richColors />
+              <InstallPrompt />
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/registro" element={<Registro />} />
