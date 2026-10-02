@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
@@ -8,6 +7,7 @@ import { obtenerCatalogo, obtenerCategoriasCatalogo } from '@/services/catalogoS
 import { useSincronizacionCatalogo } from '@/hooks/useSincronizacionCatalogo';
 import type { CategoriaCatalogo, ProductoCatalogo } from '@/types/catalogo';
 import { CarruselFotosProducto } from '@/components/CarruselFotosProducto';
+import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -124,9 +124,7 @@ export function Catalogo() {
       )}
 
       {cargando ? (
-        <div className="flex justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-gold motion-reduce:animate-none" />
-        </div>
+        <PantallaCargaLogo variante="en-linea" />
       ) : productos.length === 0 ? (
         <p className="py-8 text-center text-sm text-text-muted">No se encontraron productos.</p>
       ) : (

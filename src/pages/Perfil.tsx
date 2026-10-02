@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Loader2, Lock, User } from 'lucide-react';
+import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { ApiError } from '@/services/api';
@@ -105,11 +106,7 @@ export function Perfil() {
   }
 
   if (cargando) {
-    return (
-      <div className="flex justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-gold motion-reduce:animate-none" />
-      </div>
-    );
+    return <PantallaCargaLogo variante="en-linea" />;
   }
 
   return (

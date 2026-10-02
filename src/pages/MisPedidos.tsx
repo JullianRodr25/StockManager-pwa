@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Loader2, MapPin, PackageSearch } from 'lucide-react';
+import { MapPin, PackageSearch } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { ApiError } from '@/services/api';
 import { obtenerMisPedidos, obtenerPedidoPorId } from '@/services/pedidoService';
@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
 import { formatoFecha, formatoMoneda } from '@/lib/formato';
 
 const TAMANO_PAGINA = 10;
@@ -100,9 +101,7 @@ export function MisPedidos() {
       )}
 
       {cargando ? (
-        <div className="flex justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-gold motion-reduce:animate-none" />
-        </div>
+        <PantallaCargaLogo variante="en-linea" />
       ) : pedidos.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-12 text-center text-text-muted">
           <PackageSearch className="h-10 w-10" />
@@ -154,9 +153,7 @@ export function MisPedidos() {
       <Dialog open={pedidoSeleccionado !== null || cargandoDetalle} onOpenChange={(open) => !open && setPedidoSeleccionado(null)}>
         <DialogContent>
           {cargandoDetalle || !pedidoSeleccionado ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-gold motion-reduce:animate-none" />
-            </div>
+            <PantallaCargaLogo variante="en-linea" className="py-4" />
           ) : (
             <>
               <DialogHeader>
