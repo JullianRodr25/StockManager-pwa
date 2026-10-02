@@ -12,6 +12,11 @@ export default defineConfig({
       // versión nueva desplegada, sin pedirle al cliente que confirme nada (no es una app
       // crítica tipo banco donde convenga controlar el momento exacto de la actualización).
       registerType: 'autoUpdate',
+      // injectRegister: false porque el registro se hace a mano en
+      // src/registrarServiceWorker.ts, para poder además revisar actualizaciones de forma
+      // periódica mientras la app sigue abierta (ver ese archivo) — el <script> que inyecta
+      // 'auto' no deja enganchar esa lógica extra.
+      injectRegister: false,
       includeAssets: ['favicon-32.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Ferretería Gold',
