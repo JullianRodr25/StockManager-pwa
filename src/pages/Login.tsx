@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../services/api';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -36,81 +35,78 @@ export function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 sm:px-6 sm:py-8">
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-md items-center">
-        <Card className="w-full border-border bg-card/95 shadow-xl">
-          <CardHeader className="space-y-4">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-brand-navy font-heading text-lg font-extrabold text-gold">
-              FG
-            </div>
-            <div className="space-y-1 text-center">
-              <CardTitle className="text-3xl text-navy">Ferretería Gold</CardTitle>
-              <CardDescription>Ingresa para pedir a domicilio</CardDescription>
-            </div>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="identificador" className="text-navy">
-                  Cédula o correo
-                </Label>
-                <Input
-                  id="identificador"
-                  type="text"
-                  value={identificador}
-                  onChange={(e) => setIdentificador(e.target.value)}
-                  placeholder="Tu cédula o correo@ejemplo.com"
-                  autoComplete="username"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-navy">
-                  Contraseña
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                  required
-                />
-                <Link to="/olvide-contrasena" className="block text-right text-xs text-gold hover:underline">
-                  ¿Olvidaste tu contraseña?
-                </Link>
-              </div>
-
-              {error && (
-                <div
-                  className="rounded-md border border-red-200 bg-error-bg px-3 py-2 text-sm text-error-text"
-                  role="alert"
-                >
-                  {error}
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                variant="gold"
-                className="w-full font-heading text-sm uppercase tracking-wide"
-                disabled={enviando}
-              >
-                {enviando ? 'Ingresando...' : 'Ingresar'}
-              </Button>
-
-              <p className="text-center text-sm text-text-muted">
-                ¿Aún no tienes cuenta?{' '}
-                <Link to="/registro" className="font-medium text-navy hover:underline">
-                  Regístrate
-                </Link>
-              </p>
-            </form>
-          </CardContent>
-        </Card>
+    // Pantalla completa sin "tarjeta flotante" ni sombra: en una app nativa, el login ES la
+    // pantalla, no un recuadro centrado sobre un fondo vacío (eso es lo que más delata una
+    // página web adaptada). padding-top/bottom con env(safe-area-inset-*) para respetar el
+    // notch y la barra de gestos cuando la PWA está instalada.
+    <div
+      className="flex min-h-screen flex-col justify-center bg-background px-7"
+      style={{
+        paddingTop: 'max(2rem, env(safe-area-inset-top))',
+        paddingBottom: 'max(2rem, env(safe-area-inset-bottom))',
+      }}
+    >
+      <div className="mx-auto mb-9 flex w-full max-w-sm flex-col items-center">
+        <div className="mb-4 flex h-[72px] w-[72px] items-center justify-center rounded-2xl border-[3px] border-gold bg-brand-navy font-heading text-2xl font-extrabold text-gold">
+          FG
+        </div>
+        <h1 className="font-heading text-2xl font-extrabold text-navy">Ferretería Gold</h1>
+        <p className="mt-1 text-sm text-text-muted">Pide tus productos a domicilio</p>
       </div>
+
+      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-sm space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="identificador" className="text-xs font-bold text-navy">
+            Cédula o correo
+          </Label>
+          <Input
+            id="identificador"
+            type="text"
+            value={identificador}
+            onChange={(e) => setIdentificador(e.target.value)}
+            placeholder="Tu cédula o correo@ejemplo.com"
+            autoComplete="username"
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="password" className="text-xs font-bold text-navy">
+            Contraseña
+          </Label>
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
+          <Link to="/olvide-contrasena" className="block pt-0.5 text-right text-xs font-medium text-gold">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
+
+        {error && (
+          <div
+            className="rounded-xl border border-red-200 bg-error-bg px-3.5 py-2.5 text-sm text-error-text"
+            role="alert"
+          >
+            {error}
+          </div>
+        )}
+
+        <Button type="submit" variant="gold" size="lg" className="w-full" disabled={enviando}>
+          {enviando ? 'Ingresando...' : 'Ingresar'}
+        </Button>
+
+        <p className="pt-1 text-center text-sm text-text-muted">
+          ¿Aún no tienes cuenta?{' '}
+          <Link to="/registro" className="font-bold text-navy">
+            Regístrate
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }

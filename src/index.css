@@ -68,6 +68,22 @@
   body {
     @apply bg-background text-navy font-body antialiased transition-colors motion-reduce:transition-none;
     margin: 0;
+    /* Quita el flash gris/azul al tocar en Android/Chrome — sin esto, cada tap en un botón o
+       tarjeta deja un parpadeo que es la señal más clara de "esto es una página web". */
+    -webkit-tap-highlight-color: transparent;
+    /* Evita el rebote elástico de fondo (ver el fondo gris del sistema) al hacer scroll más
+       allá del contenido — en una PWA instalada ese rebote rompe la ilusión de app nativa. */
+    overscroll-behavior-y: none;
+  }
+
+  button,
+  a,
+  [role='button'] {
+    /* Elimina el retraso de ~300ms antes de registrar un tap (el navegador ya no tiene que
+       esperar a ver si viene un segundo tap de zoom) y evita el zoom por doble-tap accidental
+       en controles — hace que la interfaz responda al instante, como una app nativa. */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   h1,
