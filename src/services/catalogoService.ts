@@ -1,5 +1,5 @@
 import { apiRequest } from './api';
-import type { CatalogoPaginado } from '../types/catalogo';
+import type { CatalogoPaginado, CategoriaCatalogo } from '../types/catalogo';
 
 export async function obtenerCatalogo(
   pagina: number,
@@ -15,4 +15,8 @@ export async function obtenerCatalogo(
     params.set('categoriaId', String(categoriaId));
   }
   return apiRequest<CatalogoPaginado>(`/api/catalogo?${params.toString()}`, { token });
+}
+
+export async function obtenerCategoriasCatalogo(token: string | null): Promise<CategoriaCatalogo[]> {
+  return apiRequest<CategoriaCatalogo[]>('/api/catalogo/categorias', { token });
 }

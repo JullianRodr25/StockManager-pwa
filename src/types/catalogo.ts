@@ -18,6 +18,11 @@ export interface ProductoCatalogo {
   fotos: ProductoFotoCatalogo[];
 }
 
+export interface CategoriaCatalogo {
+  id: number;
+  nombre: string;
+}
+
 export interface CatalogoPaginado {
   data: ProductoCatalogo[];
   pagina: number;
