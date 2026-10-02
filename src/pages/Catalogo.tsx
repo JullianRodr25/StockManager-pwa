@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Loader2, Package } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
@@ -7,6 +7,7 @@ import { ApiError } from '@/services/api';
 import { obtenerCatalogo } from '@/services/catalogoService';
 import { useSincronizacionCatalogo } from '@/hooks/useSincronizacionCatalogo';
 import type { ProductoCatalogo } from '@/types/catalogo';
+import { CarruselFotosProducto } from '@/components/CarruselFotosProducto';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -82,14 +83,12 @@ export function Catalogo() {
       ) : (
         <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
           {productos.map((producto) => (
-            <Card key={producto.id} className="flex flex-col gap-3 rounded-2xl p-4">
-              <div className="flex items-start justify-between gap-2">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold">
-                  <Package className="h-6 w-6" />
-                </div>
+            <Card key={producto.id} className="flex flex-col gap-3 overflow-hidden rounded-2xl p-4">
+              <div className="relative">
+                <CarruselFotosProducto fotos={producto.fotos} nombre={producto.nombre} />
                 <Badge
                   variant={producto.disponible ? 'default' : 'destructive'}
-                  className={producto.disponible ? 'border-transparent bg-green text-white' : undefined}
+                  className={`absolute right-1.5 top-1.5 ${producto.disponible ? 'border-transparent bg-green text-white' : ''}`}
                 >
                   {producto.disponible ? 'Disponible' : 'Agotado'}
                 </Badge>
