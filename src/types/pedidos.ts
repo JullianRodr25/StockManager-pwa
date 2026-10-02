@@ -19,6 +19,9 @@ export interface LineaPedidoRequest {
 export interface CrearPedidoRequest {
   direccion: string;
   lineas: LineaPedidoRequest[];
+  /** Coordenadas del pin confirmado en el selector de mapa (MapaDireccion). Opcionales. */
+  latitud?: number;
+  longitud?: number;
 }
 
 export interface DetallePedidoResponse {
@@ -36,6 +39,8 @@ export interface PedidoResponse {
   clienteId: number;
   clienteNombre: string;
   direccion: string;
+  latitud: number | null;
+  longitud: number | null;
   fecha: string;
   estado: EstadoPedido;
   total: number;

@@ -9,14 +9,18 @@ import { crearPedido } from '@/services/pedidoService';
 import { ApiError } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { MapaDireccion } from '@/components/MapaDireccion';
 import { formatoMoneda } from '@/lib/formato';
 
 export function Checkout() {
   const { token } = useAuth();
   const { items, totalCarrito, vaciarCarrito } = useCart();
-  const [direccion, setDireccion] = useState('');
+  const [ubicacion, setUbicacion] = useState<{ direccion: string; lat: number | null; lng: number | null }>({
+    direccion: '',
+    lat: null,
+    lng: null,
+  });
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +33,9 @@ export function Checkout() {
     try {
       await crearPedido(
         {
-          direccion,
+          direccion: ubicacion.direccion,
+          latitud: ubicacion.lat ?? undefined,
+          longitud: ubicacion.lng ?? undefined,
           lineas: items.map((item) => ({ productoId: item.productoId, cantidad: item.cantidad })),
         },
         token
@@ -81,15 +87,14 @@ export function Checkout() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="direccion" className="flex items-center gap-1 text-xs font-bold text-navy">
+          <Label className="flex items-center gap-1 text-xs font-bold text-navy">
             <MapPin className="h-4 w-4" /> Dirección de entrega
           </Label>
-          <Input
-            id="direccion"
-            value={direccion}
-            onChange={(e) => setDireccion(e.target.value)}
-            placeholder="Calle, número, barrio..."
-            required
+          <MapaDireccion
+            direccion={ubicacion.direccion}
+            lat={ubicacion.lat}
+            lng={ubicacion.lng}
+            onCambiar={setUbicacion}
           />
         </div>
 

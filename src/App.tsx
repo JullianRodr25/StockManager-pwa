@@ -12,6 +12,7 @@ import { RestablecerContrasena } from './pages/RestablecerContrasena';
 import { Catalogo } from './pages/Catalogo';
 import { Checkout } from './pages/Checkout';
 import { MisPedidos } from './pages/MisPedidos';
+import { Perfil } from './pages/Perfil';
 import { Toaster } from '@/components/ui/sonner';
 import { InstallPrompt } from '@/components/InstallPrompt';
 
@@ -39,6 +40,7 @@ function App() {
                   <Route path="/" element={<Catalogo />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/pedidos" element={<MisPedidos />} />
+                  <Route path="/perfil" element={<Perfil />} />
                 </Route>
               </Routes>
             </CartProvider>

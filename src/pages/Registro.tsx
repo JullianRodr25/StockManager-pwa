@@ -6,6 +6,7 @@ import { ApiError } from '../services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { MapaDireccion } from '@/components/MapaDireccion';
 
 export function Registro() {
   const [form, setForm] = useState({
@@ -16,6 +17,11 @@ export function Registro() {
     telefono: '',
     direccion: '',
   });
+  // Separado de `form`: Cliente solo guarda la dirección en texto (ver Cliente.cs), las
+  // coordenadas no se persisten acá — el pedido en Checkout captura su propia ubicación
+  // precisa cada vez (puede ser una dirección de entrega distinta a la de registro). El mapa
+  // en este formulario es, igual, un mejor selector de dirección que un campo de texto libre.
+  const [ubicacion, setUbicacion] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null });
   const [error, setError] = useState<string | null>(null);
   const [exito, setExito] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -112,15 +118,15 @@ export function Registro() {
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="direccion" className="text-xs font-bold text-navy">
-            Dirección de entrega
-          </Label>
-          <Input
-            id="direccion"
-            type="text"
-            value={form.direccion}
-            onChange={(e) => handleChange('direccion', e.target.value)}
-            required
+          <Label className="text-xs font-bold text-navy">Dirección de entrega</Label>
+          <MapaDireccion
+            direccion={form.direccion}
+            lat={ubicacion.lat}
+            lng={ubicacion.lng}
+            onCambiar={({ direccion, lat, lng }) => {
+              handleChange('direccion', direccion);
+              setUbicacion({ lat, lng });
+            }}
           />
         </div>
 

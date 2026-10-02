@@ -169,6 +169,16 @@ export function MisPedidos() {
               <div className="flex items-center gap-1.5 text-sm text-text-muted">
                 <MapPin className="h-4 w-4 shrink-0" />
                 <span>{pedidoSeleccionado.direccion}</span>
+                {pedidoSeleccionado.latitud != null && pedidoSeleccionado.longitud != null && (
+                  <a
+                    href={`https://www.google.com/maps?q=${pedidoSeleccionado.latitud},${pedidoSeleccionado.longitud}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 text-xs font-medium text-gold hover:underline"
+                  >
+                    Ver en el mapa
+                  </a>
+                )}
               </div>
               <p className="text-xs text-text-muted">{formatoFecha.format(new Date(pedidoSeleccionado.fecha))}</p>
 

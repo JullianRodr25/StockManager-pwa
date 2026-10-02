@@ -13,6 +13,15 @@ interface AuthContextValue {
   cargando: boolean;
   login: (identificador: string, password: string) => Promise<void>;
   logout: () => void;
+  /**
+   * Actualiza campos de visualización del usuario en memoria (ej. el nombre, tras editarlo en
+   * "Mi perfil") sin volver a loguearse. El token sigue siendo la fuente de verdad para
+   * autenticación/autorización (rol, expiración); esto solo evita que el nombre quede
+   * desactualizado en pantalla (Topbar, saludo del catálogo) porque el backend no reemite el
+   * JWT en cada edición de perfil — no haría falta ni vale la pena, ya que el nombre no tiene
+   * ningún peso de seguridad.
+   */
+  actualizarUsuario: (datos: Partial<Pick<ClienteAutenticado, 'nombre'>>) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -57,8 +66,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUsuario(null);
   }, []);
 
+  const actualizarUsuario = useCallback((datos: Partial<Pick<ClienteAutenticado, 'nombre'>>) => {
+    setUsuario((prev) => (prev ? { ...prev, ...datos } : prev));
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ usuario, token, cargando, login, logout }}>
+    <AuthContext.Provider value={{ usuario, token, cargando, login, logout, actualizarUsuario }}>
       {children}
     </AuthContext.Provider>
   );

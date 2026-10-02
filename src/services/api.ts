@@ -26,9 +26,7 @@ export async function apiRequest<TResponse>(
 ): Promise<TResponse> {
   const { method = 'GET', body, token } = options;
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
