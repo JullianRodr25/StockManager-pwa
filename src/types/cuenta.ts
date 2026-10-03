@@ -18,6 +18,7 @@ export interface ClienteResponse {
   direccionFiscal: string | null;
   emailFacturacion: string | null;
   tieneDatosFacturacionElectronicaCompletos: boolean;
+  fotoUrl: string | null;
 }
 
 export interface ActualizarClienteRequest {

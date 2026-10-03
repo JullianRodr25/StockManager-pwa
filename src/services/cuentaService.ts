@@ -21,3 +21,15 @@ export async function cambiarPasswordPropio(
 ): Promise<MensajeResponse> {
   return apiRequest<MensajeResponse>('/api/mi-cuenta/cambiar-password', { method: 'POST', body: request, token });
 }
+
+// Foto de perfil (api/mi-cuenta/foto). Depende de que el backend tenga configurado Azure Blob
+// Storage — ver MiCuentaController en el backend.
+export async function subirFotoPerfil(archivo: File, token: string | null): Promise<ClienteResponse> {
+  const formData = new FormData();
+  formData.append('archivo', archivo);
+  return apiRequest<ClienteResponse>('/api/mi-cuenta/foto', { method: 'POST', body: formData, token });
+}
+
+export async function eliminarFotoPerfil(token: string | null): Promise<ClienteResponse> {
+  return apiRequest<ClienteResponse>('/api/mi-cuenta/foto', { method: 'DELETE', token });
+}

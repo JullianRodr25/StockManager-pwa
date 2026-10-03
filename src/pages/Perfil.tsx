@@ -1,16 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { Loader2, Lock, User } from 'lucide-react';
+import { Camera, Loader2, Lock, User, X } from 'lucide-react';
 import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { ApiError } from '@/services/api';
-import { actualizarMiCuenta, cambiarPasswordPropio, obtenerMiCuenta } from '@/services/cuentaService';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import {
+  actualizarMiCuenta,
+  cambiarPasswordPropio,
+  eliminarFotoPerfil,
+  obtenerMiCuenta,
+  subirFotoPerfil,
+} from '@/services/cuentaService';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+const TIPOS_FOTO_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp'];
+const TAMANO_MAXIMO_FOTO_BYTES = 5 * 1024 * 1024; // 5 MB
 
 function obtenerIniciales(nombre: string): string {
   return nombre
@@ -31,6 +40,11 @@ export function Perfil() {
   const [errorDatos, setErrorDatos] = useState<string | null>(null);
   const [guardandoDatos, setGuardandoDatos] = useState(false);
 
+  const [fotoUrl, setFotoUrl] = useState<string | null>(null);
+  const [subiendoFoto, setSubiendoFoto] = useState(false);
+  const [eliminandoFoto, setEliminandoFoto] = useState(false);
+  const inputFotoRef = useRef<HTMLInputElement>(null);
+
   const [passwords, setPasswords] = useState({ actual: '', nueva: '', confirmar: '' });
   const [errorPassword, setErrorPassword] = useState<string | null>(null);
   const [cambiandoPassword, setCambiandoPassword] = useState(false);
@@ -47,6 +61,7 @@ export function Perfil() {
           telefono: cliente.telefono,
           direccion: cliente.direccion,
         });
+        setFotoUrl(cliente.fotoUrl);
       } catch (err) {
         if (!cancelado) {
           setErrorCarga(err instanceof ApiError ? err.message : 'No se pudieron cargar tus datos.');
@@ -105,6 +120,46 @@ export function Perfil() {
     }
   }
 
+  async function handleSeleccionarFoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const archivo = e.target.files?.[0];
+    e.target.value = ''; // permite volver a elegir el mismo archivo si se cancela y reintenta
+
+    if (!archivo) return;
+
+    if (!TIPOS_FOTO_PERMITIDOS.includes(archivo.type)) {
+      toast.error('Solo se permiten imágenes JPG, PNG o WEBP.');
+      return;
+    }
+    if (archivo.size > TAMANO_MAXIMO_FOTO_BYTES) {
+      toast.error('La imagen no puede superar los 5 MB.');
+      return;
+    }
+
+    setSubiendoFoto(true);
+    try {
+      const actualizado = await subirFotoPerfil(archivo, token);
+      setFotoUrl(actualizado.fotoUrl);
+      toast.success('Foto de perfil actualizada.');
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : 'No se pudo subir la foto.');
+    } finally {
+      setSubiendoFoto(false);
+    }
+  }
+
+  async function handleEliminarFoto() {
+    setEliminandoFoto(true);
+    try {
+      const actualizado = await eliminarFotoPerfil(token);
+      setFotoUrl(actualizado.fotoUrl);
+      toast.success('Foto de perfil eliminada.');
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : 'No se pudo eliminar la foto.');
+    } finally {
+      setEliminandoFoto(false);
+    }
+  }
+
   if (cargando) {
     return <PantallaCargaLogo variante="en-linea" />;
   }
@@ -112,11 +167,52 @@ export function Perfil() {
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-6">
       <div className="flex flex-col items-center gap-3 pt-2">
-        <Avatar className="h-20 w-20 border-[3px] border-gold">
-          <AvatarFallback className="text-xl font-semibold">
-            {usuario ? obtenerIniciales(usuario.nombre) : '??'}
-          </AvatarFallback>
-        </Avatar>
+        <div className="relative">
+          <Avatar className="h-20 w-20 border-[3px] border-gold">
+            {fotoUrl && <AvatarImage src={fotoUrl} alt="Foto de perfil" />}
+            <AvatarFallback className="text-xl font-semibold">
+              {usuario ? obtenerIniciales(usuario.nombre) : '??'}
+            </AvatarFallback>
+          </Avatar>
+
+          <button
+            type="button"
+            onClick={() => inputFotoRef.current?.click()}
+            disabled={subiendoFoto || eliminandoFoto}
+            className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-gold text-navy shadow-sm disabled:opacity-60"
+            aria-label="Cambiar foto de perfil"
+          >
+            {subiendoFoto ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin motion-reduce:animate-none" />
+            ) : (
+              <Camera className="h-3.5 w-3.5" />
+            )}
+          </button>
+
+          {fotoUrl && (
+            <button
+              type="button"
+              onClick={handleEliminarFoto}
+              disabled={subiendoFoto || eliminandoFoto}
+              className="absolute -bottom-1 -left-1 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-white text-error-text shadow-sm disabled:opacity-60"
+              aria-label="Eliminar foto de perfil"
+            >
+              {eliminandoFoto ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin motion-reduce:animate-none" />
+              ) : (
+                <X className="h-3.5 w-3.5" />
+              )}
+            </button>
+          )}
+
+          <input
+            ref={inputFotoRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={handleSeleccionarFoto}
+          />
+        </div>
 
         <h1 className="font-heading text-xl font-bold text-navy">{datos.nombre}</h1>
       </div>
