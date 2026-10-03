@@ -10,6 +10,8 @@ export interface ClienteResponse {
   email: string;
   telefono: string;
   direccion: string;
+  latitud: number | null;
+  longitud: number | null;
   activo: boolean;
   origenRegistro: string;
   tipoDocumentoFiscal: string | null;
@@ -26,6 +28,10 @@ export interface ActualizarClienteRequest {
   email: string;
   telefono: string;
   direccion: string;
+  // Opcionales: si se omiten, el backend conserva las coordenadas que el cliente ya tuviera
+  // guardadas (ver ActualizarClienteRequest en el backend). Perfil.tsx siempre las envía.
+  latitud?: number | null;
+  longitud?: number | null;
 }
 
 export interface CambiarPasswordPropioRequest {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { Camera, Loader2, Lock, User, X } from 'lucide-react';
+import { Camera, Loader2, Lock, MapPin, User, X } from 'lucide-react';
 import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { MapaDireccion } from '@/components/MapaDireccion';
 
 const TIPOS_FOTO_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp'];
 const TAMANO_MAXIMO_FOTO_BYTES = 5 * 1024 * 1024; // 5 MB
@@ -36,7 +37,14 @@ export function Perfil() {
   const [cargando, setCargando] = useState(true);
   const [errorCarga, setErrorCarga] = useState<string | null>(null);
 
-  const [datos, setDatos] = useState({ nombre: '', email: '', telefono: '', direccion: '' });
+  const [datos, setDatos] = useState({
+    nombre: '',
+    email: '',
+    telefono: '',
+    direccion: '',
+    lat: null as number | null,
+    lng: null as number | null,
+  });
   const [errorDatos, setErrorDatos] = useState<string | null>(null);
   const [guardandoDatos, setGuardandoDatos] = useState(false);
 
@@ -60,6 +68,8 @@ export function Perfil() {
           email: cliente.email,
           telefono: cliente.telefono,
           direccion: cliente.direccion,
+          lat: cliente.latitud,
+          lng: cliente.longitud,
         });
         setFotoUrl(cliente.fotoUrl);
       } catch (err) {
@@ -80,12 +90,24 @@ export function Perfil() {
     setErrorDatos(null);
     setGuardandoDatos(true);
     try {
-      const actualizado = await actualizarMiCuenta(datos, token);
+      const actualizado = await actualizarMiCuenta(
+        {
+          nombre: datos.nombre,
+          email: datos.email,
+          telefono: datos.telefono,
+          direccion: datos.direccion,
+          latitud: datos.lat,
+          longitud: datos.lng,
+        },
+        token
+      );
       setDatos({
         nombre: actualizado.nombre,
         email: actualizado.email,
         telefono: actualizado.telefono,
         direccion: actualizado.direccion,
+        lat: actualizado.latitud,
+        lng: actualizado.longitud,
       });
       // El token no se reemite al editar el perfil (el nombre no tiene peso de seguridad), así
       // que se refresca en memoria para que Topbar y el saludo del catálogo no muestren el
@@ -269,14 +291,14 @@ export function Perfil() {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="direccion" className="text-xs font-bold text-navy">
-                Dirección
+              <Label className="flex items-center gap-1 text-xs font-bold text-navy">
+                <MapPin className="h-3.5 w-3.5" /> Dirección
               </Label>
-              <Input
-                id="direccion"
-                value={datos.direccion}
-                onChange={(e) => setDatos((prev) => ({ ...prev, direccion: e.target.value }))}
-                required
+              <MapaDireccion
+                direccion={datos.direccion}
+                lat={datos.lat}
+                lng={datos.lng}
+                onCambiar={({ direccion, lat, lng }) => setDatos((prev) => ({ ...prev, direccion, lat, lng }))}
               />
             </div>
 

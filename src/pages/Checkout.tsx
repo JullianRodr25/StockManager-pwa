@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, MapPin } from 'lucide-react';
@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { crearPedido } from '@/services/pedidoService';
+import { obtenerMiCuenta } from '@/services/cuentaService';
 import { ApiError } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,6 +25,29 @@ export function Checkout() {
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const navigate = useNavigate();
+
+  // Precarga la ubicación guardada en "Mi cuenta" (si el cliente la fijó alguna vez) como
+  // punto de partida del mapa, para no obligarlo a buscar su dirección en cada pedido. Sigue
+  // siendo editable: mover el pin o escribir otra dirección acá no toca lo guardado en su
+  // cuenta, solo afecta a este pedido puntual (ver comentario de Cliente.Latitud en el backend).
+  useEffect(() => {
+    let cancelado = false;
+    obtenerMiCuenta(token)
+      .then((cliente) => {
+        if (cancelado) return;
+        setUbicacion((prev) =>
+          prev.direccion
+            ? prev
+            : { direccion: cliente.direccion, lat: cliente.latitud, lng: cliente.longitud }
+        );
+      })
+      .catch(() => {
+        // Sin bloquear el checkout: si falla, el cliente simplemente arranca con el mapa vacío.
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, [token]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
