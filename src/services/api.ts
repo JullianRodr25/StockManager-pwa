@@ -26,15 +26,24 @@ export async function apiRequest<TResponse>(
 ): Promise<TResponse> {
   const { method = 'GET', body, token } = options;
 
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const headers: Record<string, string> = {};
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  // FormData (subida de archivos, ej. subirFotoPerfil) viaja tal cual, sin
+  // Content-Type explícito: el navegador arma el multipart/form-data con el
+  // boundary correcto solo si no lo pisamos acá. Todo lo demás sigue siendo
+  // JSON, como antes.
+  const esFormData = body instanceof FormData;
+  if (!esFormData) {
+    headers['Content-Type'] = 'application/json';
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers,
-    body: body ? JSON.stringify(body) : undefined,
+    body: esFormData ? (body as FormData) : body ? JSON.stringify(body) : undefined,
   });
 
   if (!response.ok) {
