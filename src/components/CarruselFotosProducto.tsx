@@ -38,14 +38,14 @@ export function CarruselFotosProducto({ fotos, nombre, alto = 'h-32' }: Carrusel
       <div
         ref={contenedorRef}
         onScroll={handleScroll}
-        className={`flex ${alto} w-full snap-x snap-mandatory overflow-x-auto rounded-xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+        className={`flex ${alto} w-full snap-x snap-mandatory overflow-x-auto rounded-xl bg-muted [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {fotos.map((foto) => (
           <img
             key={foto.id}
             src={foto.url}
             alt={nombre}
-            className={`${alto} w-full shrink-0 snap-center snap-always object-cover`}
+            className={`${alto} w-full shrink-0 snap-center snap-always object-contain`}
           />
         ))}
       </div>
