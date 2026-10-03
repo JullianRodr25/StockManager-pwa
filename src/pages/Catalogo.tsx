@@ -7,6 +7,8 @@ import { obtenerCatalogo, obtenerCategoriasCatalogo } from '@/services/catalogoS
 import { useSincronizacionCatalogo } from '@/hooks/useSincronizacionCatalogo';
 import type { CategoriaCatalogo, ProductoCatalogo } from '@/types/catalogo';
 import { CarruselFotosProducto } from '@/components/CarruselFotosProducto';
+import { DetalleProductoModal } from '@/components/DetalleProductoModal';
+import { Estrellas } from '@/components/Estrellas';
 import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -29,6 +31,9 @@ export function Catalogo() {
 
   const [categorias, setCategorias] = useState<CategoriaCatalogo[]>([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<number | null>(null);
+
+  const [productoSeleccionado, setProductoSeleccionado] = useState<ProductoCatalogo | null>(null);
+  const [detalleAbierto, setDetalleAbierto] = useState(false);
 
   const cargarCatalogo = useCallback(
     async (paginaSolicitada: number, categoriaId: number | null) => {
@@ -81,6 +86,26 @@ export function Catalogo() {
     toast.success(`${producto.nombre} agregado al carrito`);
   }
 
+  function abrirDetalle(producto: ProductoCatalogo) {
+    setProductoSeleccionado(producto);
+    setDetalleAbierto(true);
+  }
+
+  // El modal de reseñas recalcula el promedio/total en el momento (crear/editar/eliminar una
+  // reseña), así que la tarjeta del catálogo se actualiza sin tener que recargar la página.
+  function actualizarCalificacionProducto(
+    productoId: number,
+    calificacionPromedio: number | null,
+    totalResenas: number
+  ) {
+    setProductos((prev) =>
+      prev.map((p) => (p.id === productoId ? { ...p, calificacionPromedio, totalResenas } : p))
+    );
+    setProductoSeleccionado((prev) =>
+      prev && prev.id === productoId ? { ...prev, calificacionPromedio, totalResenas } : prev
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="font-heading text-2xl font-bold text-navy">Hola, {usuario?.nombre}</h1>
@@ -130,7 +155,11 @@ export function Catalogo() {
       ) : (
         <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
           {productos.map((producto) => (
-            <Card key={producto.id} className="flex flex-col gap-3 overflow-hidden rounded-2xl p-4">
+            <Card
+              key={producto.id}
+              onClick={() => abrirDetalle(producto)}
+              className="flex cursor-pointer flex-col gap-3 overflow-hidden rounded-2xl p-4 transition-transform active:scale-[0.98]"
+            >
               <div className="relative">
                 <CarruselFotosProducto fotos={producto.fotos} nombre={producto.nombre} />
                 <Badge
@@ -143,10 +172,24 @@ export function Catalogo() {
               <div className="flex flex-col gap-1">
                 <p className="text-sm font-medium leading-snug text-navy">{producto.nombre}</p>
                 <p className="text-xs text-text-muted">{producto.categoriaNombre}</p>
+                {producto.totalResenas > 0 && (
+                  <div className="flex items-center gap-1">
+                    <Estrellas valor={producto.calificacionPromedio ?? 0} tamano="sm" />
+                    <span className="text-xs text-text-muted">({producto.totalResenas})</span>
+                  </div>
+                )}
               </div>
               <div className="mt-auto flex items-center justify-between gap-2">
                 <p className="text-sm font-bold text-gold">{formatoMoneda.format(producto.precio)}</p>
-                <Button variant="gold" size="sm" disabled={!producto.disponible} onClick={() => pedir(producto)}>
+                <Button
+                  variant="gold"
+                  size="sm"
+                  disabled={!producto.disponible}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    pedir(producto);
+                  }}
+                >
                   Pedir
                 </Button>
               </div>
@@ -175,6 +218,14 @@ export function Catalogo() {
           </div>
         </div>
       )}
+
+      <DetalleProductoModal
+        producto={productoSeleccionado}
+        open={detalleAbierto}
+        onOpenChange={setDetalleAbierto}
+        onPedir={pedir}
+        onResenasActualizadas={actualizarCalificacionProducto}
+      />
     </div>
   );
 }

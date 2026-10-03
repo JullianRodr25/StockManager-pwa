@@ -5,18 +5,22 @@ import type { ProductoFotoCatalogo } from '@/types/catalogo';
 interface CarruselFotosProductoProps {
   fotos: ProductoFotoCatalogo[];
   nombre: string;
+  /// Alto del carrusel como clase de Tailwind. "h-32" (tarjeta del catálogo, el default) o
+  /// "h-64" (modal de detalle, fotos más grandes) — mismo componente, mismo scroll-snap, solo
+  /// cambia el tamaño.
+  alto?: string;
 }
 
 /// Carrusel estilo Homecenter para la tarjeta de un producto en el catálogo: swipeable con
 /// scroll-snap nativo (sin librería extra) y puntos indicadores. Si el producto no tiene
 /// fotos, muestra el placeholder de siempre; si tiene solo una, la muestra fija sin puntos.
-export function CarruselFotosProducto({ fotos, nombre }: CarruselFotosProductoProps) {
+export function CarruselFotosProducto({ fotos, nombre, alto = 'h-32' }: CarruselFotosProductoProps) {
   const [indiceActivo, setIndiceActivo] = useState(0);
   const contenedorRef = useRef<HTMLDivElement>(null);
 
   if (fotos.length === 0) {
     return (
-      <div className="flex h-32 w-full shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold">
+      <div className={`flex ${alto} w-full shrink-0 items-center justify-center rounded-xl bg-gold/10 text-gold`}>
         <Package className="h-8 w-8" />
       </div>
     );
@@ -34,14 +38,14 @@ export function CarruselFotosProducto({ fotos, nombre }: CarruselFotosProductoPr
       <div
         ref={contenedorRef}
         onScroll={handleScroll}
-        className="flex h-32 w-full snap-x snap-mandatory overflow-x-auto rounded-xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className={`flex ${alto} w-full snap-x snap-mandatory overflow-x-auto rounded-xl [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {fotos.map((foto) => (
           <img
             key={foto.id}
             src={foto.url}
             alt={nombre}
-            className="h-32 w-full shrink-0 snap-center snap-always object-cover"
+            className={`${alto} w-full shrink-0 snap-center snap-always object-cover`}
           />
         ))}
       </div>
