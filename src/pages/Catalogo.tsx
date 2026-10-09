@@ -10,10 +10,10 @@ import { CarruselFotosProducto } from '@/components/CarruselFotosProducto';
 import { DetalleProductoModal } from '@/components/DetalleProductoModal';
 import { Estrellas } from '@/components/Estrellas';
 import { PantallaCargaLogo } from '@/components/PantallaCargaLogo';
+import { SelectorCategorias } from '@/components/SelectorCategorias';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { formatoMoneda } from '@/lib/formato';
 
 const TAMANO_PAGINA = 20;
@@ -111,35 +111,11 @@ export function Catalogo() {
       <h1 className="font-heading text-2xl font-bold text-navy">Hola, {usuario?.nombre}</h1>
 
       {categorias.length > 0 && (
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <button
-            type="button"
-            onClick={() => seleccionarCategoria(null)}
-            className={cn(
-              'shrink-0 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
-              categoriaSeleccionada === null
-                ? 'border-gold bg-gold text-brand-navy'
-                : 'border-border bg-background text-text-muted'
-            )}
-          >
-            Todas
-          </button>
-          {categorias.map((categoria) => (
-            <button
-              key={categoria.id}
-              type="button"
-              onClick={() => seleccionarCategoria(categoria.id)}
-              className={cn(
-                'shrink-0 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
-                categoriaSeleccionada === categoria.id
-                  ? 'border-gold bg-gold text-brand-navy'
-                  : 'border-border bg-background text-text-muted'
-              )}
-            >
-              {categoria.nombre}
-            </button>
-          ))}
-        </div>
+        <SelectorCategorias
+          categorias={categorias}
+          seleccionada={categoriaSeleccionada}
+          onSeleccionar={seleccionarCategoria}
+        />
       )}
 
       {error && (

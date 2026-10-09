@@ -24,6 +24,8 @@ export interface ProductoCatalogo {
 export interface CategoriaCatalogo {
   id: number;
   nombre: string;
+  // Productos activos de la categoría (el backend solo devuelve categorías con al menos uno).
+  cantidadProductos: number;
 }
 
 export interface CatalogoPaginado {
