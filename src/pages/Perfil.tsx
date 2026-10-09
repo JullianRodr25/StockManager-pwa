@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Label } from '@/components/ui/label';
 import { MapaDireccion } from '@/components/MapaDireccion';
 
@@ -333,9 +334,8 @@ export function Perfil() {
               <Label htmlFor="passwordActual" className="text-xs font-bold text-navy">
                 Contraseña actual
               </Label>
-              <Input
+              <PasswordInput
                 id="passwordActual"
-                type="password"
                 value={passwords.actual}
                 onChange={(e) => setPasswords((prev) => ({ ...prev, actual: e.target.value }))}
                 required
@@ -346,9 +346,8 @@ export function Perfil() {
               <Label htmlFor="passwordNueva" className="text-xs font-bold text-navy">
                 Nueva contraseña
               </Label>
-              <Input
+              <PasswordInput
                 id="passwordNueva"
-                type="password"
                 minLength={8}
                 value={passwords.nueva}
                 onChange={(e) => setPasswords((prev) => ({ ...prev, nueva: e.target.value }))}
@@ -360,9 +359,8 @@ export function Perfil() {
               <Label htmlFor="passwordConfirmar" className="text-xs font-bold text-navy">
                 Confirmar nueva contraseña
               </Label>
-              <Input
+              <PasswordInput
                 id="passwordConfirmar"
-                type="password"
                 minLength={8}
                 value={passwords.confirmar}
                 onChange={(e) => setPasswords((prev) => ({ ...prev, confirmar: e.target.value }))}

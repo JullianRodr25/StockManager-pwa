@@ -5,6 +5,7 @@ import { registrarCliente } from '../services/authService';
 import { ApiError } from '../services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Label } from '@/components/ui/label';
 import { MapaDireccion } from '@/components/MapaDireccion';
 
@@ -134,9 +135,8 @@ export function Registro() {
           <Label htmlFor="password" className="text-xs font-bold text-navy">
             Contraseña
           </Label>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             value={form.password}
             onChange={(e) => handleChange('password', e.target.value)}
             autoComplete="new-password"
